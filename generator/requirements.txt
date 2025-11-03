@@ -1,0 +1,5 @@
+sqlalchemy
+PyMySQL
+python-dotenv
+Faker
+boto3
