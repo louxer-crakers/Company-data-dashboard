@@ -82,6 +82,10 @@ DYNAMO_SALES_TABLE=sales_cache
 DYNAMO_SALARIES_TABLE=salaries_cache
 ```
 
+Note: 
+
+- The primary id for salaries table is "salary_id" with type is "number"
+- The primary id for sales table is "sale_id" with type is "number"
 ## 7. Usage
 
 You can run the script manually for testing or configure it as a system service for production use.
