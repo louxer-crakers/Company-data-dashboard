@@ -1,24 +1,28 @@
 <script>
   import { onMount } from 'svelte';
+  // 1. Impor variabel .env secara aman menggunakan modul SvelteKit
+  import { PUBLIC_API_BASE_URL } from '$env/static/public';
 
-  // ------------------------------------------------------------------
-  // 1. GANTI INI DENGAN URL API GATEWAY ANDA
-  // (Ini adalah "Invoke URL" dari API Gateway stage 'v1' Anda)
-  // ------------------------------------------------------------------
-  const API_BASE_URL = 'https://xxxxxxxxx.execute-api.ap-southeast-1.amazonaws.com/v1';
+  // 2. Gunakan variabel yang sudah diimpor
+  const API_BASE_URL = PUBLIC_API_BASE_URL;
+
+  // --------------------------------------------------------
+  // // --------------------------------------------------------
+  /** @type {import('./$types').PageData} */
+  export let data; // 'data' ini berisi { serverIp: '...' }
 
 
-  // 2. State untuk menyimpan data dari API
+  // State untuk menyimpan data dari API
   let summaryData = { recent_sales: [], recent_salaries: [] };
   let salesReport = [];
   let salariesReport = [];
 
-  // 3. State untuk UI (loading & error)
+  // State untuk UI (loading & error)
   let isLoadingSummary = true;
   let isLoadingReport = false;
   let error = null;
 
-  // 4. Fungsi untuk mengambil data /summary (dari DynamoDB)
+  // Fungsi untuk mengambil data /summary (dari DynamoDB)
   async function fetchSummary() {
     isLoadingSummary = true;
     error = null;
@@ -33,7 +37,7 @@
     }
   }
 
-  // 5. Fungsi untuk mengambil data /report (dari RDS)
+  // Fungsi untuk mengambil data /report (dari RDS)
   async function fetchReport(type) {
     isLoadingReport = true;
     error = null;
@@ -43,12 +47,12 @@
     try {
       const res = await fetch(`${API_BASE_URL}/report/${type}`);
       if (!res.ok) throw new Error(`Error HTTP: ${res.status} ${res.statusText}`);
-      const data = await res.json();
-
+      const dataApi = await res.json();
+      
       if (type === 'sales') {
-        salesReport = data;
+        salesReport = dataApi;
       } else if (type === 'salaries') {
-        salariesReport = data;
+        salariesReport = dataApi;
       }
     } catch (e) {
       error = e.message;
@@ -57,14 +61,13 @@
     }
   }
 
-  // 6. Jalankan `fetchSummary` saat halaman pertama kali dibuka
+  // Jalankan `fetchSummary` saat halaman pertama kali dibuka
   onMount(() => {
     fetchSummary();
   });
 
   // Helper untuk format mata uang
   function formatCurrency(value) {
-    // Memastikan value adalah angka sebelum format
     const numberValue = Number(value) || 0;
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -85,6 +88,11 @@
 <main>
   <h1>Dashboard Perusahaan</h1>
 
+  <div class="server-info">
+    Dilayani oleh instance: {data.serverIp}
+  </div>
+
+
   {#if error}
     <div class="error-box">
       <strong>Error:</strong> {error}
@@ -93,7 +101,7 @@
 
   <section>
     <h2>Ringkasan Cepat (dari DynamoDB)</h2>
-
+    
     {#if isLoadingSummary}
       <p>Memuat ringkasan...</p>
     {:else}
@@ -111,7 +119,7 @@
             {/each}
           </ul>
         </div>
-
+        
         <div class="card">
           <h3>Pembayaran Gaji Terkini</h3>
           <ul>
@@ -224,9 +232,20 @@
     color: #374151;
     margin-top: 2rem;
   }
-
+  
   h3 {
     margin-top: 0;
+  }
+
+  /* -------------------------------------------------------- */
+  /* 3. TAMBAHAN: Style untuk info IP */
+  /* -------------------------------------------------------- */
+  .server-info {
+    font-size: 0.8rem;
+    color: #6b7280; /* Abu-abu */
+    text-align: right;
+    margin-bottom: 1rem;
+    font-family: monospace;
   }
 
   .summary-grid {
@@ -311,7 +330,7 @@
     background-color: #f9fafb;
     font-weight: 600;
   }
-
+  
   tr:nth-child(even) {
     background-color: #f9fafb;
   }

@@ -32,7 +32,7 @@ DYNAMO_SALARIES_TABLE = os.getenv("DYNAMO_SALARIES_TABLE")
 
 # Inisialisasi Klien (di luar loop)
 fake = Faker('id_ID')
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 sales_table = dynamodb.Table(DYNAMO_SALES_TABLE)
 salaries_table = dynamodb.Table(DYNAMO_SALARIES_TABLE)
 
@@ -50,7 +50,7 @@ class Sale(Base):
     product_name = Column(String(100))
     quantity = Column(Integer)
     total_amount = Column(Float)
-    sale_time = Column(DateTime, default=datetime.datetime.now(datetime.UTC))
+    sale_time = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
 
 class Salary(Base):
     __tablename__ = 'salaries'
@@ -58,7 +58,7 @@ class Salary(Base):
     employee_name = Column(String(100))
     department = Column(String(50))
     salary_amount = Column(Float)
-    payment_time = Column(DateTime, default=datetime.datetime.now(datetime.UTC))
+    payment_time = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
 
 # --- 3. Fungsi Database ---
 def setup_database_rds():
@@ -99,7 +99,7 @@ def generate_and_save(session):
             employee_name=fake.name(),
             department=random.choice(DEPARTMENTS),
             salary_amount=round(random.uniform(5000000, 15000000), 2),
-            payment_time=datetime.datetime.now(datetime.UTC)
+            payment_time=datetime.datetime.now(datetime.timezone.utc)
         )
         session.add(new_salary)
 
@@ -108,7 +108,7 @@ def generate_and_save(session):
             product_name=random.choice(PRODUCTS),
             quantity=random.randint(1, 10),
             total_amount=round(random.uniform(500000, 25000000), 2),
-            sale_time=datetime.datetime.now(datetime.UTC)
+            sale_time=datetime.datetime.now(datetime.timezone.utc)
         )
         session.add(new_sale)
 
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     
     try:
         while True:
-            db_session = LocalSession()
+            db_session = SessionLocal()
             try:
                 generate_and_save(db_session)
                 sleep_time = random.randint(5, 10) # Jeda acak

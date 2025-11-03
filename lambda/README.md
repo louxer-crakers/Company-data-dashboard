@@ -24,7 +24,6 @@ The function is designed to be triggered by an API Gateway using **Lambda Proxy 
 | `GET` | `/summary` | **DynamoDB** | Retrieves a fast, limited summary of recent sales and salaries. Designed for high-speed dashboard widgets. |
 | `GET` | `/report/sales` | **AWS RDS (SQL)** | Performs a detailed query to fetch the last 100 sales records directly from the primary database. |
 | `GET` | `/report/salaries` | **AWS RDS (SQL)** | Performs a detailed query to fetch the last 100 salary payment records directly from the primary database. |
-| `GET` | `/*` (any other) | N/A | Returns a 404 "Not Found" error with a list of valid endpoints. |
 
 ## 4. Deployment Prerequisites
 
