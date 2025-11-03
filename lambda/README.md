@@ -48,8 +48,8 @@ In the Lambda function's configuration, set the following environment variables.
 * `DB_USER`: Your RDS database username.
 * `DB_PASSWORD`: Your RDS database password.
 * `DB_NAME`: The name of your database (e.g., `company_db`).
-* `DYNAMO_SALES_TABLE`: The name of your DynamoDB sales table (e.g., `sales_cache`).
-* `DYNAMO_SALARIES_TABLE`: The name of your DynamoDB salaries table (e.g., `salaries_cache`).
+* `DYNAMO_SALES_TABLE`: The name of your DynamoDB sales table (e.g., `sales_cache`(The primary id is "sale_id" with type is "number")).
+* `DYNAMO_SALARIES_TABLE`: The name of your DynamoDB salaries table (e.g., `salaries_cache`(The primary id is "salary_id" with type is "number")).
 
 ### API Gateway Integration
 
