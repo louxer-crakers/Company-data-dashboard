@@ -27,23 +27,7 @@ The intended architecture is:
 * **Continuous Data Generation:** Runs as an infinite loop to simulate a real-time data feed.
 * **Secure Configuration:** Loads all database credentials and resource names from a `.env` file.
 
-## 4. Prerequisites
-
-Before running this script, you must have the following AWS infrastructure and configuration in place:
-
-1.  **VPC:** A VPC with public and private subnets, a NAT Gateway, and an Internet Gateway.
-2.  **Bastion Host:** An EC2 instance in a public subnet to provide secure SSH access.
-3.  **Private EC2 Instance:** An Amazon Linux instance in a private subnet where this script will run.
-4.  **RDS Database:** A PostgreSQL database running in a private subnet.
-5.  **DynamoDB Tables:** Two DynamoDB tables (e.g., `sales_cache` and `salaries_cache`) must be created.
-6.  **IAM Role (Crucial):** The Private EC2 Instance **must** have an IAM Role attached with a policy granting `dynamodb:PutItem` permissions for your two DynamoDB tables.
-7.  **Security Groups:**
-    * The Bastion Host's Security Group must allow SSH (port 22) from your IP.
-    * The Private Instance's Security Group must allow SSH (port 22) from the Bastion Host's Security Group.
-    * The RDS Instance's Security Group must allow PostgreSQL (port 5432) from the Private Instance's Security Group.
-8.  **Python 3.8+** installed on the private instance.
-
-## 5. Installation and Setup
+## 4. Installation and Setup
 
 1.  Access your private instance via the Bastion Host.
 2.  Clone this repository:
@@ -61,7 +45,7 @@ Before running this script, you must have the following AWS infrastructure and c
     pip install -r requirements.txt
     ```
 
-## 6. Configuration
+## 5. Configuration
 
 Create a `.env` file in the root of the project directory. This file will store your sensitive credentials.
 
